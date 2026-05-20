@@ -1,0 +1,45 @@
+name: Update Contributions
+
+on:
+  push:
+    branches: [main, dev]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate contribution records
+        run: |
+          declare -A names=(
+            ["jueun"]="주은"
+            ["byeongmin"]="병민"
+            ["jinwoo"]="진우"
+            ["seung"]="세웅"
+            ["ichan"]="이찬"
+          )
+          for en in "${!names[@]}"; do
+            ko="${names[$en]}"
+            file="docs/contributions/${en}.md"
+            header=$(sed '/^## 커밋 히스토리/,$d' "$file")
+            {
+              echo "$header"
+              echo "## 커밋 히스토리"
+              echo "> 마지막 갱신: $(date '+%Y-%m-%d %H:%M UTC')"
+              echo ""
+              git log --author="$en" \
+                      --pretty=format:"- %ad | %s" \
+                      --date=short || echo "- (커밋 없음)"
+            } > "$file"
+          done
+
+      - name: Commit updated contributions
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/contributions/
+          git diff --staged --quiet || git commit -m "docs: update contribution records"
+          git push
