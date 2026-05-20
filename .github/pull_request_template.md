@@ -10,8 +10,8 @@
 
 ## 체크리스트
 
-- [ ] `develop` 최신화 후 브랜치 생성했음
-- [ ] PR 올리기 전 `rebase origin/develop` 했음
+- [ ] `dev` 최신화 후 브랜치 생성했음
+- [ ] PR 올리기 전 `rebase origin/dev` 했음
 - [ ] 400줄 이하 (초과 시 분리 여부 검토)
 - [ ] 본인 PR 본인 머지 X — Reviewer 지정했음
 
